@@ -1,0 +1,5 @@
+displayName = Parasitic Nanites 寄生机器人
+author = Xx xXXxX
+version = 0.0.0.1
+modReferences = XxDefinitions
+sortAfter = XxDefinitions
