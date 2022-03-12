@@ -117,8 +117,8 @@ namespace ParasiticNanites.Effects
 			spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.NonPremultiplied, SamplerState.AnisotropicClamp, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
 		}
 		public static Point PointLimit(Point point) {
-			point.X = XxDefinitions.Utils.LimitCircular(point.X,0,TWidth);
-			point.Y = XxDefinitions.Utils.LimitCircular(point.Y, 0, THeight);
+			point.X = XxDefinitions.Utils.LimitLoop(point.X,0,TWidth);
+			point.Y = XxDefinitions.Utils.LimitLoop(point.Y, 0, THeight);
 			return point;
 		}
 		public static Point GetRandPNDPoint() {

@@ -76,7 +76,7 @@ namespace ParasiticNanites.Tiles
 
 		public Point GetPNDXY(int x, int y)
 		{
-			//return new Point(XxDefinitions.Utils.LimitCircular( x * 16,0,Effects.ParasiticNanitesDraw.Width-1), y * 16);
+			//return new Point(XxDefinitions.Utils.LimitLoop( x * 16,0,Effects.ParasiticNanitesDraw.Width-1), y * 16);
 			return Effects.ParasiticNanitesDrawTiles.PointLimit(new Point(x * 16, y * 16));
 		}
 		public Point GetPNDOrigin(int x, int y)

@@ -29,7 +29,7 @@ namespace ParasiticNanites.Items.Tests
         {
             base.SetStaticDefaults();
             DisplayName.SetDefault("ParasiticNanitesSpreadTest");
-            Tooltip.SetDefault("ParasiticNanitesSpreadTest");
+            Tooltip.SetDefault("ParasiticNanitesSpreadTest Test Item");
         }
 
         // 最最最重要的物品基本属性部分

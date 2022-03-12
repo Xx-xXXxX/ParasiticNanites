@@ -14,7 +14,7 @@ using Terraria.ID;
 using Microsoft.Xna.Framework.Graphics;
 using System.IO;
 using ParasiticNanites.Items;
-
+using XxDefinitions;
 namespace ParasiticNanites.Projectiles
 {
 	public class ParasiticNanitesProj:ModProjectile
@@ -26,6 +26,12 @@ namespace ParasiticNanites.Projectiles
 			DisplayName.AddTranslation(Terraria.Localization.GameCulture.Chinese, "寄生机器人");
 		}
 		public static ulong Rand1=0,Rand2=0;
+		public static int RandF() {
+			Rand1 = Terraria.Utils.RandomNextSeed(Rand1 ^ Rand2);
+			Rand2 = Terraria.Utils.RandomNextSeed(Rand1 - Rand2);
+			return (int)(Rand1 ^ Rand2);
+		}
+		public static XxDefinitions.IRandomByDelegate rand = new XxDefinitions.IRandomByDelegate(RandF);
 		public static XxDefinitions.NetPacketTreeLeaf<int> GetRandNet;
 		public static void Load() {
 			GetRandNet = new XxDefinitions.NetPacketTreeLeaf<int>(
@@ -84,8 +90,35 @@ namespace ParasiticNanites.Projectiles
 				}
 				return D;
 			}
+		}
+		public static List<int> SummonSomeParasiticNanites(Rectangle rect, int Num, bool Flying, int Ignore = 0, float speed = 7, Action<int> action = null)
+		{
+			// Max ln(ParasiticNanitesBuff.ParasiticNanitesProjNum)
+			List<int> D = new List<int>();
+			if (ParasiticNanites.ParasiticNanitesProjNum + 1 >= ParasiticNanites.ParasiticNanitesProjMaxNum)
+			{
+				D.Add(NewParasiticNanitesProj(rand.NextVectorInRect(rect), Num, Flying, Ignore, speed));
+				return D;
+			}
+			else
+			{
+				int SummonNum = SummonSomeParasiticNanitesNum(Num);
+				if (SummonNum == 0) return D;
+				int HasPProjD = (int)Math.Floor((float)Num / SummonNum);
+				int HasPProjA = Num % SummonNum;
+				int realnum = 0;
+				for (int i = 1; i <= SummonNum; ++i)
+				{
+					int it = NewParasiticNanitesProj(rand.NextVectorInRect(rect), HasPProjD + ((i > HasPProjA) ? (0) : (1)), Flying, Ignore, speed);
+					action?.Invoke(it);
+					D.Add(it);
+					realnum += HasPProjD + ((i > HasPProjA) ? (0) : (1));
+				}
+				return D;
+			}
 			return D;
 		}
+
 		public static int TimeMax {
 			get => 360;
 		}

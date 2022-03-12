@@ -35,9 +35,9 @@ namespace ParasiticNanites.Items.Tests
 			DisplayName.AddTranslation(GameCulture.Chinese, "ParasiticNanitesProjTest2");
 
 			// 物品的描述，加入换行符 '\n' 可以多行显示哦
-			Tooltip.SetDefault("...");
+			Tooltip.SetDefault("... Test Item");
 			// 同理，我们加一个中文的翻译（？？？我们不本来就是中国人？
-			Tooltip.AddTranslation(GameCulture.Chinese, "。。。");
+			Tooltip.AddTranslation(GameCulture.Chinese, "。。。 Test Item");
 		}
 
 		// 最最最重要的物品基本属性部分
@@ -129,8 +129,8 @@ namespace ParasiticNanites.Items.Tests
 		public override bool Shoot(Player player, ref Vector2 position, ref float speedX, ref float speedY, ref int type, ref int damage, ref float knockBack)
 		{
 			//Main.projectile[ Projectiles.ParasiticNanitesProj.NewParasiticNanitesProjPerfect(Main.MouseWorld, Vector2.Zero, 10000, true)].timeLeft-=15;
-
-			Projectile.NewProjectile(Main.MouseWorld, Vector2.Zero, ModContent.ProjectileType<ParasiticNanitesKiller>(), 0, 0, Main.myPlayer);
+			XxDefinitions.Utils.SummonUtils.SummonDustExplosion(position,64,0,0,ModContent.DustType<Dusts.ParasiticNanitesDust>(),4,4,4);
+			//Projectile.NewProjectile(Main.MouseWorld, Vector2.Zero, ModContent.ProjectileType<ParasiticNanitesKiller>(), 0, 0, Main.myPlayer);
 			return true;
 		}
 		public override bool PreDrawInInventory(SpriteBatch spriteBatch, Vector2 position, Rectangle frame, Color drawColor, Color itemColor, Vector2 origin, float scale)

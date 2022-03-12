@@ -53,11 +53,10 @@ namespace ParasiticNanites.Buffs
                 if ((NPCs.ParasiticNanitesSlime.SlimeNPC.Contains(npc.type)))
                 {
                     NPC newnpc = Main.npc[NPC.NewNPC((int)npc.position.X, (int)npc.position.Y-1, ModContent.NPCType<NPCs.ParasiticNanitesSlime>())];
-                    newnpc.scale = npc.scale;
                     npc.ai.CopyTo(newnpc.ai, 0);
                     npc.localAI.CopyTo(newnpc.localAI, 0);
                     newnpc.position = npc.position+new Vector2(0,-4);
-                    newnpc.velocity = npc.velocity;
+                    newnpc.velocity = npc.velocity/2;
                     //npc.StrikeNPC(npc.lifeMax * 2, 0, 0, false, true, false);
                     npc.active = false;
                 }

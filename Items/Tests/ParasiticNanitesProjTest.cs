@@ -28,7 +28,7 @@ namespace ParasiticNanites.Items.Tests
         {
             base.SetStaticDefaults();
             DisplayName.SetDefault("ParasiticNanitesProjTest");
-            Tooltip.SetDefault("TestParasiticNanitesProj");
+            Tooltip.SetDefault("TestParasiticNanitesProj,Test Item");
         }
 
         // 最最最重要的物品基本属性部分
@@ -59,7 +59,9 @@ namespace ParasiticNanites.Items.Tests
 		// 控制这把枪使用时候的重写函数
 		public override bool Shoot(Player player, ref Vector2 position, ref float speedX, ref float speedY, ref int type, ref int damage, ref float knockBack)
         {
-            ParasiticNanitesProj.SummonSomeParasiticNanites(Main.MouseWorld,100,true,action:(i)=> { NetMessage.SendData(MessageID.SyncProjectile, number: i); });
+            //ParasiticNanitesProj.SummonSomeParasiticNanites(Main.MouseWorld,100,true,action:(i)=> { NetMessage.SendData(MessageID.SyncProjectile, number: i); });
+            XxDefinitions.Utils.SummonUtils.SummonDustExplosion(Main.MouseWorld, 64, 0, 0, ModContent.DustType<Dusts.ParasiticNanitesDust>(), 4, 4, 4);
+
             return false;
         }
         // 物品合成表的设置部分

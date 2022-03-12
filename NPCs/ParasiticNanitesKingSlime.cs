@@ -267,8 +267,8 @@ namespace ParasiticNanites.NPCs
 					{
 						npc.velocity = Vector2.Zero;
 						MoveTimeDelay += 1;
-						XxDefinitions.Utils.SummonUtils.SummonDustExplosion(npc.Center, 1, 0, 0, PNDustType,2, 2, (120 - MoveTimeDelay) / 10);
-						XxDefinitions.Utils.SummonUtils.SummonDustExplosion(TeleportPos, 1, 0, 0, PNDustType,2, 2, MoveTimeDelay);
+						XxDefinitions.Utils.SummonUtils.SummonDustExplosion(npc.Center, 64, 0, 0, PNDustType,2, 2, (120 - MoveTimeDelay) / 10);
+						XxDefinitions.Utils.SummonUtils.SummonDustExplosion(TeleportPos, 64, 0, 0, PNDustType,2, 2, MoveTimeDelay);
 						if (MoveTimeDelay < 60) { npc.alpha = (int)(MoveTimeDelay / 60f * 255);Scale = (60-MoveTimeDelay) / 60f * GetLifeValueScale(); }
 						if (MoveTimeDelay == 60) npc.Center = TeleportPos;
 						if (MoveTimeDelay > 60 && MoveTimeDelay < 120) { npc.alpha = (int)((120 - MoveTimeDelay) / 60f * 255); Scale = (( MoveTimeDelay-60) / 60f * GetLifeValueScale()); }
@@ -356,7 +356,7 @@ namespace ParasiticNanites.NPCs
 						if (AttackTimeDelay == 0) {
 							int D = Math.Abs(RandNextInt())% AttackTypeWeightMax;
 							AttackType = (EAttackType)(
-								(XxDefinitions.Utils.CalculateUtils.WeightingChoose(D, AttackTypeWeight)) + 1
+								(XxDefinitions.Utils.CalculateUtils.WeightedChoose(D, AttackTypeWeight)) + 1
 								);
 						}
 					}break;
@@ -528,10 +528,19 @@ namespace ParasiticNanites.NPCs
 			ParasiticNanitesWorld.KingSlimeCount -= 1;
 			return base.CheckDead();
 		}
-		public override void HitEffect(int hitDirection, double damage)
+		public override void OnHitByProjectile(Projectile projectile, int damage, float knockback, bool crit)
 		{
-			Projectiles.ParasiticNanitesProj.SummonSomeParasiticNanites(npc.Center, (int)(damage/4f), false, npc.whoAmI + 1);
+			Projectiles.ParasiticNanitesProj.SummonSomeParasiticNanites(projectile.Center, (int)(damage / 6f), false, npc.whoAmI + 1,action:(i)=> { Main.projectile[i].velocity -= projectile.velocity * 0.5f; });
 		}
+		public override void OnHitByItem(Player player, Item item, int damage, float knockback, bool crit)
+		{
+			Projectiles.ParasiticNanitesProj.SummonSomeParasiticNanites(npc.Hitbox, (int)(damage / 6f), false, npc.whoAmI + 1);
+		}
+
+		//public override void HitEffect(int hitDirection, double damage)
+		//{
+		//	Projectiles.ParasiticNanitesProj.SummonSomeParasiticNanites(npc.Center, (int)(damage/4f), false, npc.whoAmI + 1);
+		//}
 		public override void NPCLoot()
 		{
 			Item.NewItem(npc.Hitbox,ModContent.ItemType<Items.ParasiticNanitesSignalTransmitter>(),5);
@@ -545,7 +554,7 @@ namespace ParasiticNanites.NPCs
 				}
 			}
 
-			XxDefinitions.Utils.SummonUtils.SummonDustExplosion(npc.Center, 48, 0, 0, PNDustType, 16, 16, 4);
+			XxDefinitions.Utils.SummonUtils.SummonDustExplosion(npc.Center, 48, 0, 0, PNDustType, 64, 64, 4);
 		}
 		public override bool PreDraw(SpriteBatch spriteBatch, Color drawColor)
 		{

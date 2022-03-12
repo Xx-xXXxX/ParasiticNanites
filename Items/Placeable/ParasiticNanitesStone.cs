@@ -6,7 +6,7 @@ namespace ParasiticNanites.Items.Placeable
 	public class ParasiticNanitesStone : ModItem
 	{
 		public override void SetStaticDefaults() {
-			Tooltip.SetDefault("This is a modded Stone block.");
+			Tooltip.SetDefault("Test Item");
 		}
 
 		public override void SetDefaults() {

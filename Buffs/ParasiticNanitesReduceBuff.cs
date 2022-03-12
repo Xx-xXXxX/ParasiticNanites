@@ -39,7 +39,7 @@ namespace ParasiticNanites.Buffs
                 if (npc.HasBuff(ModContent.BuffType<ParasiticNanitesBuff>()))
                 {
                     int ParasiticNanitesIndex = npc.FindBuffIndex(ModContent.BuffType<ParasiticNanitesBuff>());
-                    Projectiles.ParasiticNanitesProj.SummonSomeParasiticNanites(npc.Center, Math.Min(npc.buffTime[buffIndex], npc.buffTime[ParasiticNanitesIndex]), npc.noGravity,npc.whoAmI+1);
+                    Projectiles.ParasiticNanitesProj.SummonSomeParasiticNanites(npc.Hitbox, Math.Min(npc.buffTime[buffIndex], npc.buffTime[ParasiticNanitesIndex]), npc.noGravity,npc.whoAmI+1);
                     npc.buffTime[ParasiticNanitesIndex] -= npc.buffTime[buffIndex];
                     if (npc.buffTime[ParasiticNanitesIndex] < 0) npc.buffTime[ParasiticNanitesIndex] = 0;
                     ParasiticNanitesNum = npc.buffTime[ParasiticNanitesIndex];
@@ -60,7 +60,7 @@ namespace ParasiticNanites.Buffs
                 if ( player.HasBuff(ModContent.BuffType<ParasiticNanitesBuff>()) )
                 {
                     int ParasiticNanitesIndex = player.FindBuffIndex(ModContent.BuffType<ParasiticNanitesBuff>());
-                    Projectiles.ParasiticNanitesProj.SummonSomeParasiticNanites(player.Center, Math.Min(player.buffTime[buffIndex], player.buffTime[ParasiticNanitesIndex]), player.gravity == 0,-(player.whoAmI+1));
+                    Projectiles.ParasiticNanitesProj.SummonSomeParasiticNanites(player.Hitbox, Math.Min(player.buffTime[buffIndex], player.buffTime[ParasiticNanitesIndex]), player.gravity == 0,-(player.whoAmI+1));
                     player.buffTime[ParasiticNanitesIndex] -= player.buffTime[buffIndex];
                     if (player.buffTime[ParasiticNanitesIndex] < 0) player.buffTime[ParasiticNanitesIndex] = 0;
                     ParasiticNanitesNum = player.buffTime[ParasiticNanitesIndex];

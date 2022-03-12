@@ -33,6 +33,7 @@ namespace ParasiticNanites.Effects
 			}
 			//texture = ModContent.GetTexture("ParasiticNanites/RandBR");
 			texture = new Texture2D(Main.graphics.GraphicsDevice,TWidth,THeight);
+			texture.SetData(Enumerable.Range(0, TWidth * THeight).Select(i => Color.Black).ToArray());
 			DrawPND = mod.GetEffect("Effects/PND");
 			DrawPND.Parameters["Nx"].SetValue(1);
 			DrawPND.Parameters["Ny"].SetValue(1);
@@ -118,8 +119,8 @@ namespace ParasiticNanites.Effects
 			spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.NonPremultiplied, SamplerState.AnisotropicClamp, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
 		}
 		public static Point PointLimit(Point point) {
-			point.X = XxDefinitions.Utils.LimitCircular(point.X,0,TWidth);
-			point.Y = XxDefinitions.Utils.LimitCircular(point.Y, 0, THeight);
+			point.X = XxDefinitions.Utils.LimitLoop(point.X,0,TWidth);
+			point.Y = XxDefinitions.Utils.LimitLoop(point.Y, 0, THeight);
 			return point;
 		}
 		public static Point GetRandPNDPoint() {

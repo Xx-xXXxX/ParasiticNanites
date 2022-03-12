@@ -44,7 +44,7 @@ namespace ParasiticNanites.NPCs
 		}
 		public override void HitEffect(int hitDirection, double damage)
 		{
-			Projectiles.ParasiticNanitesProj.SummonSomeParasiticNanites(npc.Center,(int)Math.Min(npc.life,damage)/2,false,npc.whoAmI+1);
+			Projectiles.ParasiticNanitesProj.SummonSomeParasiticNanites(npc.Hitbox,(int)Math.Min(npc.life,damage)/2,false,npc.whoAmI+1);
 		}
 		public override void OnHitPlayer(Player target, int damage, bool crit)
 		{
@@ -89,7 +89,7 @@ namespace ParasiticNanites.NPCs
 			{
 				XxDefinitions.Utils.SummonUtils.SummonProjExplosionTrap(npc.Center, 196, 300,150, Microsoft.Xna.Framework.Color.Red);
 			}
-			XxDefinitions.Utils.SummonUtils.SummonDustExplosion(npc.Center, 16, 0, 0, ModContent.DustType<Dusts.ParasiticNanitesDust>(), 4, 4, 3);
+			XxDefinitions.Utils.SummonUtils.SummonDustExplosion(npc.Center, 16, 0, 0, ModContent.DustType<Dusts.ParasiticNanitesDust>(), 8, 8, 3);
 
 			return true;
 		}
