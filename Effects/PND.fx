@@ -19,7 +19,7 @@ float4 PixelShaderFunction(float2 coords : TEXCOORD0) : COLOR0 {
     return gcolor;
 }
 technique Technique1 {
-    pass PNDT {
+    pass PND {
         PixelShader = compile ps_2_0 PixelShaderFunction();
     }
 }

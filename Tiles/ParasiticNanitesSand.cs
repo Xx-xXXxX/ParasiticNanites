@@ -141,7 +141,7 @@ namespace ParasiticNanites.Tiles
 		public override bool PreDraw(int i, int j, SpriteBatch spriteBatch)
 		{
 			XxDefinitions.Utils.SpriteBatchUsingEffect(spriteBatch);
-			Effects.ParasiticNanitesDrawTiles.UseEffect(GetPNDXY(i, j), new Point(288, 270), GetPNDOrigin(i, j), Color.White);
+			Effects.ParasiticNanitesDrawTiles.UseEffect(GetPNDXY(i, j), new Point(288, 270), GetPNDOrigin(i, j), Terraria.Lighting.GetColor(i, j));
 			return true;
 		}
 		public override void PostDraw(int i, int j, SpriteBatch spriteBatch)

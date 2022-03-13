@@ -33,7 +33,7 @@ namespace ParasiticNanites.Effects
 			}
 			//texture = ModContent.GetTexture("ParasiticNanites/RandBR");
 			texture = new Texture2D(Main.graphics.GraphicsDevice,TWidth,THeight);
-			texture.SetData(Enumerable.Range(0, TWidth * THeight).Select(i => Color.Black).ToArray());
+			texture.SetData(Enumerable.Range(0, TWidth * THeight).Select(i => Color.Transparent).ToArray());
 			DrawPND = mod.GetEffect("Effects/PNDT");
 			DrawPND.Parameters["Nx"].SetValue(1);
 			DrawPND.Parameters["Ny"].SetValue(1);
@@ -58,7 +58,7 @@ namespace ParasiticNanites.Effects
 				{
 					for (int k = 0; k < SizePerPixel; ++k)
 					{
-						Cols[XYToI(P.X * SizePerPixel + j, P.Y * SizePerPixel + k)] = Color.Black;
+						Cols[XYToI(P.X * SizePerPixel + j, P.Y * SizePerPixel + k)] = Color.Transparent;
 					}
 				}
 			}
@@ -105,7 +105,7 @@ namespace ParasiticNanites.Effects
 			DrawPND.Parameters["Ox"].SetValue(Origin.X);
 			DrawPND.Parameters["Oy"].SetValue(Origin.Y);
 			DrawPND.Parameters["dcolor"].SetValue(color.ToVector4());
-
+			ParasiticNanites.Logging.Debug(color);
 			DrawPND.CurrentTechnique.Passes["PNDT"].Apply();
 		}
 		public static void DrawEffect(SpriteBatch spriteBatch,Point xy,Point Size, Point Origin, Color dcolor,Action<SpriteBatch> DrawFunc) {
