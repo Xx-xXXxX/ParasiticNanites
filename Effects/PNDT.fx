@@ -15,7 +15,7 @@ float4 PixelShaderFunction(float2 coords : TEXCOORD0) : COLOR0 {
     if (!any(color))
         return color;
     float2 N={ (coords.x*Sx-Ox+Nx) /Tx , (coords.y*Sy-Oy+Ny) /Ty };
-    float4 gcolor=tex2D(TextureSampler, N)*dcolor*0.75f+color*0.25f;
+    float4 gcolor=(tex2D(TextureSampler, N)*0.75f+color*0.25f)*dcolor;
     return gcolor;
 }
 technique Technique1 {

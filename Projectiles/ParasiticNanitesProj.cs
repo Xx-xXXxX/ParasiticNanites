@@ -282,6 +282,7 @@ namespace ParasiticNanites.Projectiles
 		}
 		public override bool OnTileCollide(Vector2 oldVelocity)
 		{
+			if(projectile.velocity.Length()>1)
 			Collision.HitTiles(projectile.position + projectile.velocity, projectile.velocity, (int)R*2, (int)R * 2);
 			Main.PlaySound(Terraria. ID. SoundID.Item10, projectile.position);
 			if (projectile.velocity.X != oldVelocity.X)
@@ -292,7 +293,9 @@ namespace ParasiticNanites.Projectiles
 			{
 				projectile.velocity.Y = -oldVelocity.Y;
 			}
-			projectile.velocity *= 0.95f;
+
+			projectile.velocity.X = (float)Math.Floor(projectile.velocity.X * 0.95f * 10) / 10;
+			projectile.velocity.Y = (float)Math.Floor(projectile.velocity.Y * 0.95f * 10) / 10;
 			return false;
 		}
 		public override bool CanDamage()
