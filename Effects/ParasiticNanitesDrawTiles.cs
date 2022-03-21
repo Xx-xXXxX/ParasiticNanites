@@ -105,7 +105,6 @@ namespace ParasiticNanites.Effects
 			DrawPND.Parameters["Ox"].SetValue(Origin.X);
 			DrawPND.Parameters["Oy"].SetValue(Origin.Y);
 			DrawPND.Parameters["dcolor"].SetValue(color.ToVector4());
-			ParasiticNanites.Logging.Debug(color);
 			DrawPND.CurrentTechnique.Passes["PNDT"].Apply();
 		}
 		public static void DrawEffect(SpriteBatch spriteBatch,Point xy,Point Size, Point Origin, Color dcolor,Action<SpriteBatch> DrawFunc) {

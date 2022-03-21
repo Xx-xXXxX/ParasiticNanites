@@ -99,7 +99,6 @@ namespace ParasiticNanites
 			log = null;
 		}
 		~ParasiticNanites() {
-			LogManager.GetLogger("ParasiticNanites ~").Debug($"~ParasiticNanites {this.GetType().FullName}");
 		}
 		public static int AdjustParasiticNanitesNow = 0;
 		public const int MaxAPNNum = 50;

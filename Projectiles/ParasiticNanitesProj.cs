@@ -38,12 +38,12 @@ namespace ParasiticNanites.Projectiles
 				  (reader, who) => {
 					  Rand1 = reader.ReadUInt64();
 					  Rand2 = reader.ReadUInt64();
-					  ParasiticNanites.Logging.Debug("Get");
+					  ParasiticNanites.AdjustParasiticNanitesNow = reader.ReadInt32();
 				  }, ParasiticNanites.NetPacketTreeMain, 10,
 				   (N) => {
 					   N.Write(Rand1);
 					   N.Write(Rand2);
-					   ParasiticNanites.Logging.Debug("Set");
+					   N.Write(ParasiticNanites.AdjustParasiticNanitesNow);
 				   });
 		}
 		public static int NewParasiticNanitesProj(Vector2 Pos,int Num,bool Flying,int Ignore=0, float speed = 7) {
