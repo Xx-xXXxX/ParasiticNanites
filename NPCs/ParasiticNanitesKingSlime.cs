@@ -312,10 +312,21 @@ namespace ParasiticNanites.NPCs
 		}
 		public void ResetScale(float newscale) {
 			Vector2 Dp = Size * (newscale-npc.scale);
-			npc.position.Y-=Dp.Y;
-			npc.position.X -= Dp.X / 2;
+			//npc.position.Y-=Dp.Y;
+			//npc.position.X -= Dp.X / 2;
+			Vector2 Move = Vector2.Zero;
+
+			Move += Collision.TileCollision(npc.Center, new Vector2(-Dp.X/2,0), (int)(npc.Size.X), (int)npc.Size.Y);
+			Move += Collision.TileCollision(npc.Center, new Vector2(Dp.X / 2,0), (int)(npc.Size.X), (int)npc.Size.Y);
+
+			Move += Collision.TileCollision(npc.Center, new Vector2(0,-Dp.Y / 2), (int)(npc.Size.X), (int)npc.Size.Y);
+			Move += Collision.TileCollision(npc.Center, new Vector2(0,Dp.Y / 2), (int)(npc.Size.X), (int)npc.Size.Y);
+			
+			npc.position -= Dp / 2;
+			npc.position += Move;
 			npc.Size = Size * newscale;
 			npc.scale = newscale;
+			
 		}
 		public uint AttackTimeDelay
 		{
@@ -517,7 +528,7 @@ namespace ParasiticNanites.NPCs
 		}
 		public override void FindFrame(int frameHeight)
 		{
-			if (Main.time%15==0) SetFrame();
+			if (Main.time%15==0||(MoveTimeDelay<30&& Main.time % 5 == 0)) SetFrame();
 		}
 		public override bool CheckActive()
 		{

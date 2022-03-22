@@ -38,6 +38,7 @@ namespace ParasiticNanites.Buffs
         }
         public override void Update(NPC npc, ref int buffIndex)
         {
+            if (npc.type == NPCID.TargetDummy) { npc.buffTime[buffIndex] = 0;return; }
             npc.buffTime[buffIndex] += 1;
             int Num = npc.buffTime[buffIndex];
             if ((npc.boss) ? (Main.time % (20 * ParasiticNanites.ParasiticNanitesUpdateTime) == 0) : (Main.time % (12 * ParasiticNanites.ParasiticNanitesUpdateTime) == 0)) {

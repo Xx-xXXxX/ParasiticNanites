@@ -20,12 +20,14 @@ namespace ParasiticNanites.Effects
 		public static int TWidth => Width* SizePerPixel;
 		public static int THeight => Height * SizePerPixel;
 		public static int SizePerPixel = 2;
-		public static Point[] PNPs = new Point[1024];
+		public static int PNPNum = 8192;
+		public static Point[] PNPs = new Point[PNPNum];
+		public static Color[] colors;
 		public static Texture2D texture;
 		public static Effect DrawPND;
 		public static void SetDef(Mod mod)
 		{
-			PNPs = new Point[2048];
+			PNPs = new Point[PNPNum];
 			for (int i = 0; i < PNPs.Length; ++i)
 			{
 				PNPs[i].X = Main.rand.Next(0, Width - 1);
@@ -33,69 +35,108 @@ namespace ParasiticNanites.Effects
 			}
 			//texture = ModContent.GetTexture("ParasiticNanites/RandBR");
 			texture = new Texture2D(Main.graphics.GraphicsDevice,TWidth,THeight);
-			texture.SetData(Enumerable.Range(0, TWidth * THeight).Select(i => Color.Transparent).ToArray());
+			colors = Enumerable.Range(0, TWidth * THeight).Select(i => Color.Transparent).ToArray();
+			texture.SetData(colors);
 			DrawPND = mod.GetEffect("Effects/PNDT");
 			DrawPND.Parameters["Nx"].SetValue(1);
 			DrawPND.Parameters["Ny"].SetValue(1);
 			DrawPND.Parameters["Tx"].SetValue(TWidth);
 			DrawPND.Parameters["Ty"].SetValue(THeight);
 			DrawPND.Parameters["Texture"].SetValue(texture);
+			UpdateNowDI = 0;
+			UpdateNowD1 = PNPNum/ UpdateT;
+			UpdateNowD2 = PNPNum% UpdateNowD1;
+			UpdateNowI = 0;
+			
+		}
+		public static IEnumerable<int> EnumPNPs() {
+			int R = UpdateNowD1+((UpdateNowDI < UpdateNowD2) ?(1):(0));
+			for (int i = 0; i < R; ++i)
+				yield return i + UpdateNowI;
+		}
+		public static void MovePNPs() {
+			int R = UpdateNowD1 + ((UpdateNowDI < UpdateNowD2) ? (1) : (0));
+			UpdateNowI += R; UpdateNowDI += 1;
+			if (UpdateNowDI == UpdateT)
+			{
+				ParasiticNanites.Logging.Debug(UpdateNowDI);
+				UpdateNowDI = 0;
+				UpdateNowI = 0;
+			}
 		}
 		public static int XYToI(int x, int y) {
 			return y * Height*SizePerPixel + x;
 		}
+		public static Rectangle GetDrawRect(int x, int y) {
+			return new Rectangle(x * SizePerPixel, y * SizePerPixel, SizePerPixel, SizePerPixel);
+		}
+		public static int UpdateNowDI;
+		public static int UpdateNowD1;
+		public static int UpdateNowD2;
+		public static int UpdateNowI;
+		public static int UpdateT = 40;
 		public static void Update()
 		{
 			//Color[] Cols = Enumerable.Range(0, TWidth * THeight).Select(i => Color.Black).ToArray();
-			Color[] Cols=new Color[TWidth*THeight];
-			texture.GetData(Cols);
-			texture = new Texture2D(Main.graphics.GraphicsDevice, TWidth, THeight, false, SurfaceFormat.Color);
-			for (int i = 0; i < PNPs.Length; ++i) {
-
-				ref Point P = ref PNPs[i];
-
-				for (int j = 0; j < SizePerPixel; ++j)
-				{
-					for (int k = 0; k < SizePerPixel; ++k)
-					{
-						Cols[XYToI(P.X * SizePerPixel + j, P.Y * SizePerPixel + k)] = Color.Transparent;
-					}
-				}
-			}
-			for (int i = 0; i < PNPs.Length; ++i)
+			//Color[] Cols=new Color[TWidth*THeight];
+			//textureNow.GetData(Cols);
+			//textureNow = new Texture2D(Main.graphics.GraphicsDevice, TWidth, THeight, false, SurfaceFormat.Color);
+			if (Main.time % 60 == 0)
 			{
-				ref Point P = ref PNPs[i];
-
-				switch (Main.rand.Next(0, 5))
+				//textureNow.SetData(Colo);
+				texture = new Texture2D(Main.graphics.GraphicsDevice, TWidth, THeight, false, SurfaceFormat.Color);
+				texture.SetData(colors);
+				DrawPND.Parameters["Texture"].SetValue(texture);
+			}
+			else if (Main.time % 60>=20)
+			{
+				foreach (int i in EnumPNPs())
 				{
-					case 0:
-						P.X += 1;
-						if (P.X >= Width) P.X = 0;
-						break;
-					case 1:
-						P.X -= 1;
-						if (P.X < 0) P.X = Width - 1;
-						break;
-					case 2:
-						P.Y += 1;
-						if (P.Y >= Height) P.Y = 0;
-						break;
-					case 3:
-						P.Y -= 1;
-						if (P.Y < 0) P.Y = Height - 1;
-						break;
-				}
 
-				for (int j = 0; j < SizePerPixel; ++j)
-				{
-					for (int k = 0; k < SizePerPixel; ++k)
+					ref Point P = ref PNPs[i];
+					//textureOld.SetData(0, GetDrawRect(P.X, P.Y), TransparentC, 0, SizePerPixel * SizePerPixel);
+					for (int j = 0; j < SizePerPixel; ++j)
 					{
-						Cols[XYToI(P.X*SizePerPixel+j,P.Y * SizePerPixel + k)] = Color.Red;
+						for (int k = 0; k < SizePerPixel; ++k)
+						{
+							colors[XYToI(P.X * SizePerPixel + j, P.Y * SizePerPixel + k)] = Color.Transparent;
+						}
 					}
 				}
+				foreach (int i in EnumPNPs())
+				{
+					ref Point P = ref PNPs[i];
+
+					switch (Main.rand.Next(0, 5))
+					{
+						case 0:
+							P.X += 1;
+							if (P.X >= Width) P.X = 0;
+							break;
+						case 1:
+							P.X -= 1;
+							if (P.X < 0) P.X = Width - 1;
+							break;
+						case 2:
+							P.Y += 1;
+							if (P.Y >= Height) P.Y = 0;
+							break;
+						case 3:
+							P.Y -= 1;
+							if (P.Y < 0) P.Y = Height - 1;
+							break;
+					}
+					for (int j = 0; j < SizePerPixel; ++j)
+					{
+						for (int k = 0; k < SizePerPixel; ++k)
+						{
+							colors[XYToI(P.X * SizePerPixel + j, P.Y * SizePerPixel + k)] = Color.Red;
+						}
+					}
+
+				}
+				MovePNPs();
 			}
-			texture.SetData(Cols);
-			DrawPND.Parameters["Texture"].SetValue(texture);
 		}
 		public static void UseEffect(Point xy,Point Size,Point Origin,Color color) {
 			DrawPND.Parameters["Nx"].SetValue(xy.X);

@@ -18,8 +18,8 @@ namespace ParasiticNanites.Buffs
         {
             DisplayName.SetDefault("ParasiticNanitesReduce");
             DisplayName.AddTranslation(GameCulture.Chinese, "寄生机器人减少");
-            Description.SetDefault("Parasitic Nanites Can't Last Long");
-            Description.AddTranslation(GameCulture.Chinese, "寄生机器人待不了多久");
+            Description.SetDefault("Parasitic Nanites Are Being Kicked Out");
+            Description.AddTranslation(GameCulture.Chinese, "寄生机器人在被赶走");
             Main.buffNoSave[Type] = true;
             Main.debuff[Type] = true;
             this.canBeCleared = false;
@@ -44,7 +44,7 @@ namespace ParasiticNanites.Buffs
                     if (npc.buffTime[ParasiticNanitesIndex] < 0) npc.buffTime[ParasiticNanitesIndex] = 0;
                     ParasiticNanitesNum = npc.buffTime[ParasiticNanitesIndex];
                 }
-                npc.buffTime[buffIndex] -= (int)(Math.Floor(XxDefinitions.Utils.CalculateUtils.SlowlyIncreaseRaw(npc.buffTime[buffIndex], 2f)) / 2f *XxDefinitions.Utils.CalculateUtils.SlowlyDecreaseLim1To0(ParasiticNanitesNum));
+                npc.buffTime[buffIndex] -= (int)(Math.Floor(XxDefinitions.Utils.CalculateUtils.SlowlyIncreaseRaw(npc.buffTime[buffIndex], 2f)) / 1.5f *XxDefinitions.Utils.CalculateUtils.SlowlyDecreaseLim1To0(ParasiticNanitesNum, 1.5f));
                 if (npc.buffTime[buffIndex] < 0) npc.buffTime[buffIndex] = 0;
             }
             XxDefinitions.XDebugger.Utils.AddDraw.AddDrawString($"{npc.buffTime[buffIndex]}", npc.Center + new Vector2(0, +48 + 16));
@@ -65,7 +65,7 @@ namespace ParasiticNanites.Buffs
                     if (player.buffTime[ParasiticNanitesIndex] < 0) player.buffTime[ParasiticNanitesIndex] = 0;
                     ParasiticNanitesNum = player.buffTime[ParasiticNanitesIndex];
                 }
-                player.buffTime[buffIndex] -= (int)(Math.Floor(XxDefinitions.Utils.CalculateUtils.SlowlyIncreaseRaw(player.buffTime[buffIndex], 2f)) / 2f * XxDefinitions.Utils.CalculateUtils.SlowlyDecreaseLim1To0(ParasiticNanitesNum));
+                player.buffTime[buffIndex] -= (int)(Math.Floor(XxDefinitions.Utils.CalculateUtils.SlowlyIncreaseRaw(player.buffTime[buffIndex], 2f)) / 1.5f * XxDefinitions.Utils.CalculateUtils.SlowlyDecreaseLim1To0(ParasiticNanitesNum,1.5f)); 
                 if (player.buffTime[buffIndex] < 0) player.buffTime[buffIndex] = 0;
             }
             XxDefinitions.XDebugger.Utils.AddDraw.AddDrawString($"ParasiticNanitesReduceBuff:{player.buffTime[buffIndex]}\n", player.Center + new Vector2(0, 128));

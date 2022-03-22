@@ -34,14 +34,15 @@ namespace ParasiticNanites.Items
 			foreach (var i in Main.projectile) {
 				if (i.active && i.type == ModContent.ProjectileType<Projectiles.ParasiticNanitesProj>()) {
 					float _d=0f;
-					if (Collision.CheckAABBvLineCollision(i.position,
-						  i.Size,
+					if (Collision.CheckAABBvLineCollision(i.Center+ new Vector2(i.scale * -9)	,
+						  new Vector2(i.scale*18),
 						  projectile.Center - new Vector2(-16 * projectile.scale, 0).RotatedBy(projectile.rotation),
 						  projectile.Center - new Vector2(16 * projectile.scale, 0).RotatedBy(projectile.rotation),
 						  16 * projectile.scale, ref _d
 						  ))
 					{
-						Item.NewItem(i.position, i.Size, ModContent.ItemType<ParasiticNanitesItem>(), i.damage/5);
+						if(i.damage / 5>0)
+							Item.NewItem(i.position, i.Size, ModContent.ItemType<ParasiticNanitesItem>(), i.damage/5);
 						i.localAI[0] = Projectiles.ParasiticNanitesProj.SpecialDeath;
 						i.Kill();
 					}

@@ -282,9 +282,19 @@ namespace ParasiticNanites.Projectiles
 		}
 		public override bool OnTileCollide(Vector2 oldVelocity)
 		{
-			if(projectile.velocity.Length()>1)
-			Collision.HitTiles(projectile.position + projectile.velocity, projectile.velocity, (int)R*2, (int)R * 2);
-			Main.PlaySound(Terraria. ID. SoundID.Item10, projectile.position);
+			int x = (int)projectile.Center.X / 16;
+			int y = (int)projectile.Center.Y / 16;
+			if (Main.tile[x,y].collisionType==1)
+			{
+				projectile.localAI[0] = SpecialDeath;
+				projectile.Kill();
+			}
+
+			if (projectile.velocity.Length() > 1)
+			{
+				Collision.HitTiles(projectile.position + projectile.velocity, projectile.velocity, (int)R * 2, (int)R * 2);
+				Main.PlaySound(Terraria.ID.SoundID.Item10, projectile.position);
+			}
 			if (projectile.velocity.X != oldVelocity.X)
 			{
 				projectile.velocity.X = -oldVelocity.X;
@@ -302,23 +312,36 @@ namespace ParasiticNanites.Projectiles
 		{
 			return projectile.timeLeft < TimeMax-15;
 		}
+		public static bool SpecialIgnore(NPC target) {
+			return target.type == NPCID.TargetDummy || target.type == ModContent.NPCType<NPCs.ParasiticNanitesSlime>() || target.type == ModContent.NPCType<NPCs.ParasiticNanitesKingSlime>();
+		}
 		public override bool? CanHitNPC(NPC target)
 		{
-			if ((!ParasiticNanites.ProjSpike&&target.buffImmune[ModContent.BuffType<Buffs.ParasiticNanitesBuff>()]) || target.townNPC||target.type== NPCID.TargetDummy || target.type == ModContent.NPCType<NPCs.ParasiticNanitesSlime>() || target.type == ModContent.NPCType<NPCs.ParasiticNanitesKingSlime>() || (target.whoAmI+1==projectile.ai[0]&&projectile.timeLeft> TimeMax-60))
+			if ((!ParasiticNanites.ProjSpike&&target.buffImmune[ModContent.BuffType<Buffs.ParasiticNanitesBuff>()]) || SpecialIgnore (target)||  (target.whoAmI+1==projectile.ai[0]&&projectile.timeLeft> TimeMax-60))
 				return false;
 			return true;
 		}
 		public override void ModifyHitNPC(NPC target, ref int damage, ref float knockback, ref bool crit, ref int hitDirection)
 		{
 			if (ParasiticNanites.ProjSpike)
-				projectile.damage *= 3;
+			{
+				if (target.friendly)
+					projectile.damage *= 2;
+				else
+					projectile.damage *= 3;
+			}
 		}
 		public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
 		{
 
 			//XxDefinitions.XDebugger.Utils.AddDraw.AddDrawString($"Hit {CanHitNPC(target)}", projectile.Center, 15);
 			if (ParasiticNanites.ProjSpike)
-				projectile.damage /= 3;
+			{
+				if (target.friendly)
+					projectile.damage /= 2;
+				else
+					projectile.damage /= 3;
+			}
 			if (target.buffImmune[ModContent.BuffType<ParasiticNanitesBuff>()]) {
 				//target.immune[projectile.owner] = 0;
 				//Projectile.perIDStaticNPCImmunity[ModContent.ProjectileType<ParasiticNanitesProj>()][target.whoAmI] = (uint)((int)Main.GameUpdateCount + 10);

@@ -15,7 +15,29 @@ namespace ParasiticNanites.NPCs
 	{
 		public Point TPNDXY=new Point(32,52);
 		public Point PNDXY = new Point(32, 52);
-		public static HashSet<int> SlimeNPC = new HashSet<int> { NPCID.BabySlime, NPCID.BlackSlime, NPCID.BlueSlime, NPCID.CorruptSlime, NPCID.DungeonSlime, NPCID.GreenSlime, NPCID.IceSlime, NPCID.IlluminantSlime, NPCID.JungleSlime, NPCID.MotherSlime, NPCID.RedSlime, NPCID.SandSlime, NPCID.UmbrellaSlime, NPCID.YellowSlime };
+		public static HashSet<int> SlimeNPC = new HashSet<int> { 
+			NPCID.BabySlime,
+
+			NPCID.IlluminantSlime,
+
+			NPCID.CorruptSlime,
+			NPCID.DungeonSlime,
+			NPCID.IceSlime,
+			NPCID.SandSlime,
+			NPCID.JungleSlime,
+			NPCID.LavaSlime,
+
+			NPCID.MotherSlime,
+			NPCID.UmbrellaSlime,
+
+			NPCID.BlueSlime,
+			NPCID.GreenSlime,
+			NPCID.BlackSlime,
+			NPCID.RedSlime,
+			NPCID.RainbowSlime,
+			NPCID.YellowSlime,
+			NPCID.PurpleSlime
+		};
 		public override void SetStaticDefaults()
 		{
 			DisplayName.SetDefault("Parasitic Nanites Slime");
@@ -63,13 +85,13 @@ namespace ParasiticNanites.NPCs
 				//npc.StrikeNPC((int)Math.Floor(-0.02f*npc.lifeMax),0,0);
 				//npc.StrikeNPC(25+npc.defense, 0, 0);
 				if (npc.life >= npc.lifeMax)
-				{ 
-
+				{
+					npc.life = npc.lifeMax - 1;
 				}
 				else
 				if (npc.life > npc.lifeMax / 2)
 				{
-					npc.life = Math.Min(npc.lifeMax, npc.life + 10);
+					npc.life = Math.Min(npc.lifeMax-1, npc.life + 10);
 				}
 				else
 				{

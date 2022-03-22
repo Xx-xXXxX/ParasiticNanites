@@ -83,8 +83,7 @@ namespace ParasiticNanites
 			AdjustParasiticNanites();
 			SeparateParasiticNanites();
 			ParasiticNanitesDraw.Update();
-			if(Main.time%60==17)
-				ParasiticNanitesDrawTiles.Update();
+			ParasiticNanitesDrawTiles.Update();
 		}
 		public override void PostUpdateEverything()
 		{
