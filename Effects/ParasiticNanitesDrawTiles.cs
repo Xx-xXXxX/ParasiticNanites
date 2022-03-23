@@ -59,7 +59,6 @@ namespace ParasiticNanites.Effects
 			UpdateNowI += R; UpdateNowDI += 1;
 			if (UpdateNowDI == UpdateT)
 			{
-				ParasiticNanites.Logging.Debug(UpdateNowDI);
 				UpdateNowDI = 0;
 				UpdateNowI = 0;
 			}

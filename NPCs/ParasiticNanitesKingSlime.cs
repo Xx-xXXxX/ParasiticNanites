@@ -21,7 +21,7 @@ using XxDefinitions;
 namespace ParasiticNanites.NPCs
 {
 	[AutoloadBossHead]
-	public class ParasiticNanitesKingSlime:ModNPC
+	public class ParasiticNanitesKingSlime : ModNPC
 	{
 		public int IntAI0
 		{
@@ -43,53 +43,61 @@ namespace ParasiticNanites.NPCs
 			get => XxDefinitions.BitOperate.FToIBit(npc.ai[3]);
 			set => npc.ai[3] = XxDefinitions.BitOperate.IToFBit(value);
 		}
-		public uint MoveTimeDelay {//0~2^11 2048 0 10
-			get => (uint)XxDefinitions.BitOperate.GetBits(IntAI0,0,11);
-			set => IntAI0=XxDefinitions.BitOperate.SetBits(IntAI0,(int)value,0,11);
+		public uint MoveTimeDelay
+		{//0~2^11 2048 0 10
+			get => (uint)XxDefinitions.BitOperate.GetBits(IntAI0, 0, 11);
+			set => IntAI0 = XxDefinitions.BitOperate.SetBits(IntAI0, (int)value, 0, 11);
 		}
 		public EMoveMode MoveMode//0~7
 		{
 			get => (EMoveMode)XxDefinitions.BitOperate.GetBits(IntAI0, 29, 3);
-			set {
+			set
+			{
 				int NM = (int)MoveMode;
-				if (NM != (int)value) {
+				if (NM != (int)value)
+				{
 					IntAI0 = XxDefinitions.BitOperate.SetBits(IntAI0, (int)value, 29, 3);
 					SetFrame();
 				}
 			}
 		}
-		public enum EMoveMode:int{ 
+		public enum EMoveMode : int
+		{
 			Waiting,
 			Jumping,
 			Teleport,
 		}
-		public int JumpTime {//0~7 11 13
+		public int JumpTime
+		{//0~7 11 13
 			get => XxDefinitions.BitOperate.GetBits(IntAI0, 11, 3);
-			set => IntAI0=XxDefinitions.BitOperate.SetBits(IntAI0, value, 11, 3);
+			set => IntAI0 = XxDefinitions.BitOperate.SetBits(IntAI0, value, 11, 3);
 		}
 		public ulong RandS;
-		public int RandNextInt() => Terraria.Utils.RandomNext(ref RandS,32);
+		public int RandNextInt() => Terraria.Utils.RandomNext(ref RandS, 32);
 		public float RandNextFloat() => Terraria.Utils.RandomFloat(ref RandS);
-		public float RandNextFloatDirection() => (RandNextFloat()-0.5f)*2;
-		public bool RandNextBool()=> Terraria.Utils.RandomNext(ref RandS, 1)%2==0;
-		public int LifeLevelLife() =>(int)((float) LifeLevel / 100*npc.lifeMax);
-		public Vector2 TeleportPos {
+		public float RandNextFloatDirection() => (RandNextFloat() - 0.5f) * 2;
+		public bool RandNextBool() => Terraria.Utils.RandomNext(ref RandS, 1) % 2 == 0;
+		public int LifeLevelLife() => (int)((float)LifeLevel / 100 * npc.lifeMax);
+		public Vector2 TeleportPos
+		{
 			get => new Vector2(npc.localAI[2], npc.localAI[3]);
 			set { npc.localAI[2] = value.X; npc.localAI[3] = value.Y; }
 		}
 		public Player Target { get => Main.player[npc.target]; }
 
 		public static uint[] JumpTimeDelays = new uint[] { 120, 15, 30, 10, 10 };
-		public static float[] JunpVels = {8,16,15,14,13};
+		public static float[] JunpVels = { 8, 16, 15, 14, 13 };
 		public Vector2 JunpVel => new Vector2(0, -JunpVels[JumpTime]);
 		public static Vector2 HorizonalMoveA => new Vector2(0.075f, 0);
 		public static int FrameCount = 6;
 		public static int FrameX = 174;
-		public static int FrameY=120;
-		public Rectangle GetFrame(int N) {
-			return new Rectangle(0,N* FrameY, FrameX, FrameY);
+		public static int FrameY = 120;
+		public Rectangle GetFrame(int N)
+		{
+			return new Rectangle(0, N * FrameY, FrameX, FrameY);
 		}
-		public int GetFrameC() {
+		public int GetFrameC()
+		{
 			return npc.frame.Y / FrameY;
 		}
 		public override void BossHeadSlot(ref int index)
@@ -98,8 +106,8 @@ namespace ParasiticNanites.NPCs
 		}
 		public override void SetStaticDefaults()
 		{
-			
-			ModTranslation DRS = mod.CreateTranslation("NPCNames.ParasiticNanitesKingSlime"); 
+
+			ModTranslation DRS = mod.CreateTranslation("NPCNames.ParasiticNanitesKingSlime");
 			DRS.SetDefault("Parasitic Nanites King Slime");
 			DRS.AddTranslation(GameCulture.Chinese, "机器人寄生史莱姆王");
 			mod.AddTranslation(DRS);
@@ -112,6 +120,25 @@ namespace ParasiticNanites.NPCs
 			DisplayName.AddTranslation(Terraria.Localization.GameCulture.Chinese, "机器人寄生史莱姆王");
 			Main.npcFrameCount[npc.type] = FrameCount;
 			NPCID.Sets.MustAlwaysDraw[npc.type] = true;
+			XxDefinitions.SetNPCFallThroughPlatforms.Add(
+				  //(n) =>
+				  //{
+				  // if (n.type == ModContent.NPCType<ParasiticNanitesKingSlime>())
+				  // {
+				  //  if (n.HasPlayerTarget)
+				  //  {
+				  //	  XxDefinitions.XDebugger.Utils.AddDraw.AddDrawLineTo(n.Center, Main.player[n.target].Center);
+				  //	  if (Main.player[n.target].Center.Y > n.Center.Y)
+				  //	  {
+				  //		  ParasiticNanites.Logging.Debug("True");
+				  //		  return true;
+				  //	  }
+				  //  }
+				  // }
+				  // return false;
+				  //}
+				  ModContent.NPCType<ParasiticNanitesKingSlime>(), XxDefinitions.SetNPCFallThroughPlatforms.FallIfTargetPlayerHigher
+				);
 		}
 		public override bool? DrawHealthBar(byte hbPosition, ref float scale, ref Vector2 position)
 		{
@@ -146,18 +173,19 @@ namespace ParasiticNanites.NPCs
 			//animationType = 15;
 			//CheckTarget();
 			MoveMode = EMoveMode.Teleport;
-			RandS = Terraria.Utils.RandomNextSeed((ulong)(ParasiticNanitesWorld.NewRSF()+(ulong)npc.type+ (ulong)Main.projectile[1].type));
+			RandS = Terraria.Utils.RandomNextSeed((ulong)(ParasiticNanitesWorld.NewRSF() + (ulong)npc.type + (ulong)Main.projectile[1].type));
 			PNDXY = Effects.ParasiticNanitesDraw.GetRandPNDPoint();
 			ParasiticNanitesWorld.KingSlimeCount += 1;
 		}
-		public Point TXY= new Point(174,720);
+		public Point TXY = new Point(174, 720);
 		public override void ScaleExpertStats(int numPlayers, float bossLifeScale)
 		{
-			npc.lifeMax= (int)((double)npc.lifeMax * 0.7 * (double)bossLifeScale);
+			npc.lifeMax = (int)((double)npc.lifeMax * 0.7 * (double)bossLifeScale);
 		}
 		public static int PNDustType => ModContent.DustType<Dusts.ParasiticNanitesDust>();
 		//public static int PNProjType=ModContent.ProjectileType<PN>
-		public bool TargetAble() {
+		public bool TargetAble()
+		{
 			if (!npc.HasPlayerTarget) return false;
 			int id = npc.target;
 			if (!XxDefinitions.Utils.PlayerCanFind(Main.player[id])) return false;
@@ -171,11 +199,12 @@ namespace ParasiticNanites.NPCs
 			if (!TargetAble()) return false;
 			int id = npc.target;
 			Player t = Main.player[id];
-			if (!Collision.CanHitLine( npc.Center, 0, 0, t.Center, 0, 0)) return true;
+			if (!Collision.CanHitLine(npc.Center, 0, 0, t.Center, 0, 0)) return true;
 			if (t.Distance(npc.Center) <= 1600) return false;
 			return true;
 		}
-		public bool CheckTarget() {
+		public bool CheckTarget()
+		{
 			if (!TargetAble())
 			{
 				npc.TargetClosest(false);
@@ -188,7 +217,8 @@ namespace ParasiticNanites.NPCs
 			else return true;
 		}
 		public static int MaxFallSpeed => 16;
-		public void MoveAI() {
+		public void MoveAI()
+		{
 			Dust.NewDust(npc.position, npc.width, npc.height, PNDustType);
 			//XxDefinitions.XDebugger.Utils.AddDraw.AddDrawString($"{MoveMode}\nTimeDelay:{MoveTimeDelay}\nVY:{npc.velocity.Y}\nJumpTime:{JumpTime}", npc.Center);
 			//XxDefinitions.XDebugger.Utils.AddDraw.AddDrawString($"{Target.Distance(npc.Center)}", Target.Center);
@@ -198,8 +228,9 @@ namespace ParasiticNanites.NPCs
 			{
 				if (CheckTarget()) npc.active = false;
 			}
-			if (TargetAble()) {
-				if (Target.position.Y> npc.position.Y + npc.height) npc.stairFall = true;
+			if (TargetAble())
+			{
+				if (Target.position.Y > npc.position.Y + npc.height) npc.stairFall = true;
 				else npc.stairFall = false;
 			}
 			switch (MoveMode)
@@ -216,7 +247,7 @@ namespace ParasiticNanites.NPCs
 								{
 									TeleportPos = Target.Center + new Vector2(0, -512);
 									if (npc.Center.X < Target.Center.X - 1000) TeleportPos += new Vector2(800, 0);
-									if(npc.Center.X > Target.Center.X + 1000) TeleportPos += new Vector2(-800, 0);
+									if (npc.Center.X > Target.Center.X + 1000) TeleportPos += new Vector2(-800, 0);
 								}
 								else TeleportPos = Target.Center;
 								MoveTimeDelay = 0;
@@ -235,9 +266,10 @@ namespace ParasiticNanites.NPCs
 								{
 									if (I.active && I.type == ModContent.NPCType<ParasiticNanitesSlime>())
 									{
-										I.velocity += JunpVel / 2;
-										if (I.Center.X < Target.Center.X - 64) I.velocity += HorizonalMoveA * 10;
-										if (I.Center.X > Target.Center.X + 64) I.velocity -= HorizonalMoveA * 10;
+										//I.velocity += JunpVel / 2;
+										//if (I.Center.X < Target.Center.X - 64) I.velocity += HorizonalMoveA * 10;
+										//if (I.Center.X > Target.Center.X + 64) I.velocity -= HorizonalMoveA * 10;
+										I.velocity += Vector2.Normalize(Target.Center - I.Center) * JunpVel.Length();
 									}
 								}
 							}
@@ -252,7 +284,7 @@ namespace ParasiticNanites.NPCs
 						if (TargetAble())
 						{
 							npc.velocity += HorizonalMoveA * ((npc.Center.X > Main.player[npc.target].Center.X) ? (-1) : (1));
-							
+
 						}
 						else if (!CheckTarget()) npc.active = false;
 						if (npc.velocity.Y == 0)
@@ -267,11 +299,11 @@ namespace ParasiticNanites.NPCs
 					{
 						npc.velocity = Vector2.Zero;
 						MoveTimeDelay += 1;
-						XxDefinitions.Utils.SummonUtils.SummonDustExplosion(npc.Center, 64, 0, 0, PNDustType,2, 2, (120 - MoveTimeDelay) / 10);
-						XxDefinitions.Utils.SummonUtils.SummonDustExplosion(TeleportPos, 64, 0, 0, PNDustType,2, 2, MoveTimeDelay);
-						if (MoveTimeDelay < 60) { npc.alpha = (int)(MoveTimeDelay / 60f * 255);Scale = (60-MoveTimeDelay) / 60f * GetLifeValueScale(); }
+						XxDefinitions.Utils.SummonUtils.SummonDustExplosion(npc.Center, 64, 0, 0, PNDustType, 2, 2, (120 - MoveTimeDelay) / 10);
+						XxDefinitions.Utils.SummonUtils.SummonDustExplosion(TeleportPos, 64, 0, 0, PNDustType, 2, 2, MoveTimeDelay);
+						if (MoveTimeDelay < 60) { npc.alpha = (int)(MoveTimeDelay / 60f * 255); Scale = (60 - MoveTimeDelay) / 60f * GetLifeValueScale(); }
 						if (MoveTimeDelay == 60) npc.Center = TeleportPos;
-						if (MoveTimeDelay > 60 && MoveTimeDelay < 120) { npc.alpha = (int)((120 - MoveTimeDelay) / 60f * 255); Scale = (( MoveTimeDelay-60) / 60f * GetLifeValueScale()); }
+						if (MoveTimeDelay > 60 && MoveTimeDelay < 120) { npc.alpha = (int)((120 - MoveTimeDelay) / 60f * 255); Scale = ((MoveTimeDelay - 60) / 60f * GetLifeValueScale()); }
 						if (MoveTimeDelay >= 120) { MoveMode = EMoveMode.Waiting; npc.velocity -= JunpVel; npc.teleporting = false; }
 					}
 					break;
@@ -280,53 +312,60 @@ namespace ParasiticNanites.NPCs
 		}
 		public int LifeLevel
 		{//14 20
-			get => 100-XxDefinitions.BitOperate.GetBits(IntAI0, 14, 7);
-			set => IntAI0 = XxDefinitions.BitOperate.SetBits(IntAI0, 100-value, 14, 7);
+			get => 100 - XxDefinitions.BitOperate.GetBits(IntAI0, 14, 7);
+			set => IntAI0 = XxDefinitions.BitOperate.SetBits(IntAI0, 100 - value, 14, 7);
 		}
-		public int GetLifeValue() {
-			return (int)((float)npc.life / npc.lifeMax*100);
+		public int GetLifeValue()
+		{
+			return (int)((float)npc.life / npc.lifeMax * 100);
 		}
 		public static float MinScale => 1f;
 		public static float MaxScale => 3f;
-		public float GetLifeValueScale() {
-			return LifeLevel/100f*(MaxScale-MinScale) + MinScale;
+		public float GetLifeValueScale()
+		{
+			return LifeLevel / 100f * (MaxScale - MinScale) + MinScale;
 		}
-		public void LifeValueAI() {
+		public void LifeValueAI()
+		{
 			DebugS += $"{GetLifeValue()} {LifeLevel}\n";
-			while (LifeLevel > GetLifeValue()) {
+			while (LifeLevel > GetLifeValue())
+			{
 				LifeLevel -= 1;
-				ParasiticNanitesProj.SummonSomeParasiticNanites(npc.Center,20,false);
-				if (LifeLevel % 3 == 0) {
+				ParasiticNanitesProj.SummonSomeParasiticNanites(npc.Center, 20, false);
+				if (LifeLevel % 3 == 0)
+				{
 					NPC.NewNPC((int)npc.Center.X, (int)npc.Center.Y - 1, ModContent.NPCType<NPCs.ParasiticNanitesSlime>());
 				}
 			}
 
-			if (Scale > GetLifeValueScale()+0.1f) Scale -= 0.05f;
+			if (Scale > GetLifeValueScale() + 0.1f) Scale -= 0.05f;
 			else
-			if (Scale < GetLifeValueScale()- 0.1f) Scale += 0.05f;
+			if (Scale < GetLifeValueScale() - 0.1f) Scale += 0.05f;
 			else Scale = GetLifeValueScale();
 		}
-		public float Scale {
+		public float Scale
+		{
 			get => npc.scale;
 			set => ResetScale(value);
 		}
-		public void ResetScale(float newscale) {
-			Vector2 Dp = Size * (newscale-npc.scale);
+		public void ResetScale(float newscale)
+		{
+			Vector2 Dp = Size * (newscale - npc.scale);
 			//npc.position.Y-=Dp.Y;
 			//npc.position.X -= Dp.X / 2;
 			Vector2 Move = Vector2.Zero;
 
-			Move += Collision.TileCollision(npc.Center, new Vector2(-Dp.X/2,0), (int)(npc.Size.X), (int)npc.Size.Y);
-			Move += Collision.TileCollision(npc.Center, new Vector2(Dp.X / 2,0), (int)(npc.Size.X), (int)npc.Size.Y);
+			Move += Collision.TileCollision(npc.Center, new Vector2(-Dp.X / 2, 0), (int)(npc.Size.X), (int)npc.Size.Y);
+			Move += Collision.TileCollision(npc.Center, new Vector2(Dp.X / 2, 0), (int)(npc.Size.X), (int)npc.Size.Y);
 
-			Move += Collision.TileCollision(npc.Center, new Vector2(0,-Dp.Y / 2), (int)(npc.Size.X), (int)npc.Size.Y);
-			Move += Collision.TileCollision(npc.Center, new Vector2(0,Dp.Y / 2), (int)(npc.Size.X), (int)npc.Size.Y);
-			
+			Move += Collision.TileCollision(npc.Center, new Vector2(0, -Dp.Y / 2), (int)(npc.Size.X), (int)npc.Size.Y);
+			Move += Collision.TileCollision(npc.Center, new Vector2(0, Dp.Y / 2), (int)(npc.Size.X), (int)npc.Size.Y);
+
 			npc.position -= Dp / 2;
 			npc.position += Move;
 			npc.Size = Size * newscale;
 			npc.scale = newscale;
-			
+
 		}
 		public uint AttackTimeDelay
 		{
@@ -341,7 +380,8 @@ namespace ParasiticNanites.NPCs
 		public EAttackType AttackType
 		{
 			get => (EAttackType)XxDefinitions.BitOperate.GetBits(IntAI1, 16, 3);
-			set {
+			set
+			{
 				if (value == AttackType) return;
 				IntAI1 = XxDefinitions.BitOperate.SetBits(IntAI1, (int)value, 16, 3);
 				AttackTimeDelay = AttackTypeTime[(int)AttackType];
@@ -358,47 +398,26 @@ namespace ParasiticNanites.NPCs
 			PNRain,
 			PNDelWave,
 		}
-		public static int[] AttackTypeWeight = new int[] {20,20,4,2,1};
+		public static int[] AttackTypeWeight = new int[] { 20, 20, 4, 2, 1 };
 		public static int AttackTypeWeightMax => 47;
-		public void AttackAI() {
+		public void AttackAI()
+		{
 			DebugS += $"{AttackType} {AttackTimeDelay}\n";
-			switch (AttackType) {
-				case EAttackType.None: {
-						if (AttackTimeDelay == 0) {
-							int D = Math.Abs(RandNextInt())% AttackTypeWeightMax;
+			switch (AttackType)
+			{
+				case EAttackType.None:
+					{
+						if (AttackTimeDelay == 0)
+						{
+							int D = Math.Abs(RandNextInt()) % AttackTypeWeightMax;
 							AttackType = (EAttackType)(
 								(XxDefinitions.Utils.CalculateUtils.WeightedChoose(D, AttackTypeWeight)) + 1
 								);
 						}
-					}break;
-				case EAttackType.Bullet: {
-						if (AttackTimeDelay == 2) {
-							//float R1 = (RandNextFloat() * 2 - 1);
-							//float R2= (RandNextFloat() * 2 - 1);
-							float speed = 12;
-							Vector2 Pos = npc.position + new Vector2(npc.width* RandNextFloat(),npc.height* RandNextFloat());
-							Vector2 Vel = Vector2.Zero;
-							float? D = (Target.Center - Pos).ToRotation();
-							if (RandNextBool()&&(D=XxDefinitions.Utils.CalculateUtils.PredictWithVel(Target.Center- Pos, Target.velocity, speed)).HasValue)
-							{
-								
-							}
-							else {
-								D = (Target.Center - Pos).ToRotation();
-							}
-							Vel = (Vector2.UnitX * speed).RotatedBy(D.Value);
-							Projectile p = Projectile.NewProjectileDirect(Pos, Vel,ModContent.ProjectileType<ParasiticNanitesBullet>(),50,0,Main.myPlayer);
-							p.npcProj = true;
-							p.friendly = false;
-							p.hostile = true;
-							p.ai[0] = 1;
-						}
-						if (AttackTimeDelay == 0) {
-							AttackType = EAttackType.None;
-						}
 					}
 					break;
-				case EAttackType.Arrow:{
+				case EAttackType.Bullet:
+					{
 						if (AttackTimeDelay == 2)
 						{
 							//float R1 = (RandNextFloat() * 2 - 1);
@@ -407,9 +426,40 @@ namespace ParasiticNanites.NPCs
 							Vector2 Pos = npc.position + new Vector2(npc.width * RandNextFloat(), npc.height * RandNextFloat());
 							Vector2 Vel = Vector2.Zero;
 							float? D = (Target.Center - Pos).ToRotation();
-							
+							if (RandNextBool() && (D = XxDefinitions.Utils.CalculateUtils.PredictWithVel(Target.Center - Pos, Target.velocity, speed)).HasValue)
+							{
+
+							}
+							else
+							{
+								D = (Target.Center - Pos).ToRotation();
+							}
 							Vel = (Vector2.UnitX * speed).RotatedBy(D.Value);
-							Projectile p = Projectile.NewProjectileDirect(Pos, Vel+new Vector2(0,-3), ModContent.ProjectileType<ParasiticNanitesArrow>(), 50, 0, Main.myPlayer);
+							Projectile p = Projectile.NewProjectileDirect(Pos, Vel, ModContent.ProjectileType<ParasiticNanitesBullet>(), 50, 0, Main.myPlayer);
+							p.npcProj = true;
+							p.friendly = false;
+							p.hostile = true;
+							p.ai[0] = 1;
+						}
+						if (AttackTimeDelay == 0)
+						{
+							AttackType = EAttackType.None;
+						}
+					}
+					break;
+				case EAttackType.Arrow:
+					{
+						if (AttackTimeDelay == 2)
+						{
+							//float R1 = (RandNextFloat() * 2 - 1);
+							//float R2= (RandNextFloat() * 2 - 1);
+							float speed = 12;
+							Vector2 Pos = npc.position + new Vector2(npc.width * RandNextFloat(), npc.height * RandNextFloat());
+							Vector2 Vel = Vector2.Zero;
+							float? D = (Target.Center - Pos).ToRotation();
+
+							Vel = (Vector2.UnitX * speed).RotatedBy(D.Value);
+							Projectile p = Projectile.NewProjectileDirect(Pos, Vel + new Vector2(0, -3), ModContent.ProjectileType<ParasiticNanitesArrow>(), 50, 0, Main.myPlayer);
 							p.npcProj = true;
 							p.friendly = false;
 							p.hostile = true;
@@ -420,7 +470,8 @@ namespace ParasiticNanites.NPCs
 						}
 					}
 					break;
-				case EAttackType.Rocket: {
+				case EAttackType.Rocket:
+					{
 						if (AttackTimeDelay == 15)
 						{
 							//float R1 = (RandNextFloat() * 2 - 1);
@@ -443,7 +494,7 @@ namespace ParasiticNanites.NPCs
 					break;
 				case EAttackType.PNRain:
 					{
-						if (AttackTimeDelay<=30&& AttackTimeDelay%3==0)
+						if (AttackTimeDelay <= 30 && AttackTimeDelay % 3 == 0)
 						{
 							//float R1 = (RandNextFloat() * 2 - 1);
 							//float R2= (RandNextFloat() * 2 - 1);
@@ -452,12 +503,12 @@ namespace ParasiticNanites.NPCs
 							Vector2 Vel = Vector2.Zero;
 							float? D = (Target.Center - Pos).ToRotation();
 
-							Vel = (Vector2.UnitX * speed).RotatedBy(D.Value)+ new Vector2(3 * RandNextFloatDirection(), 3 * RandNextFloatDirection());
+							Vel = (Vector2.UnitX * speed).RotatedBy(D.Value) + new Vector2(3 * RandNextFloatDirection(), 3 * RandNextFloatDirection());
 							Projectile p = Projectile.NewProjectileDirect(Pos, Vel + new Vector2(0, -3), ModContent.ProjectileType<ParasiticNanitesArrow>(), 50, 0, Main.myPlayer);
 							p.npcProj = true;
 							p.friendly = false;
 							p.hostile = true;
-							p.timeLeft = (int)(p.timeLeft*0.5f);
+							p.timeLeft = (int)(p.timeLeft * 0.5f);
 						}
 						if (AttackTimeDelay == 0)
 						{
@@ -466,8 +517,10 @@ namespace ParasiticNanites.NPCs
 					}
 
 					break;
-				case EAttackType.PNDelWave: {
-						if (AttackTimeDelay == 10) {
+				case EAttackType.PNDelWave:
+					{
+						if (AttackTimeDelay == 10)
+						{
 							Projectile.NewProjectile(npc.Center, Vector2.Zero, ModContent.ProjectileType<ParasiticNanitesKiller>(), 0, 0, Main.myPlayer);
 						}
 						if (AttackTimeDelay == 0)
@@ -489,18 +542,20 @@ namespace ParasiticNanites.NPCs
 		public string DebugS = "";
 		public override void AI()
 		{
+			//npc.stairFall = true;
 			ParasiticNanites.ProjBoom = true;
 			ParasiticNanites.ProjSpike = true;
 			DebugS = $"V:{npc.velocity.Y}\n";
 			MoveAI();
-			DebugS+= $"V:{npc.velocity.Y}\n";
+			DebugS += $"V:{npc.velocity.Y}\n";
 			DebugS += $"S:{npc.scale} {GetLifeValueScale()}\n";
 			LifeValueAI();
 			AttackAI();
 			XxDefinitions.XDebugger.Utils.AddDraw.AddDrawString(DebugS, npc.Center);
 			//Projectile p = Projectile.NewProjectileDirect(npc.position, Vector2.UnitX*-10,1,50,1,Main.myPlayer);
 		}
-		public void SetFrame() {
+		public void SetFrame()
+		{
 			int FN = GetFrameC();
 			switch (MoveMode)
 			{
@@ -513,7 +568,7 @@ namespace ParasiticNanites.NPCs
 					break;
 				case EMoveMode.Jumping:
 					{
-						if(npc.velocity.Y>0) npc.frame = GetFrame(4);
+						if (npc.velocity.Y > 0) npc.frame = GetFrame(4);
 						else npc.frame = GetFrame(5);
 					}
 					break;
@@ -528,11 +583,11 @@ namespace ParasiticNanites.NPCs
 		}
 		public override void FindFrame(int frameHeight)
 		{
-			if (Main.time%15==0||(MoveTimeDelay<30&& Main.time % 5 == 0)) SetFrame();
+			if (Main.time % 15 == 0 || (MoveTimeDelay < 30 && Main.time % 5 == 0)) SetFrame();
 		}
 		public override bool CheckActive()
 		{
-			return npc.life<=0;
+			return npc.life <= 0;
 		}
 		public override bool CheckDead()
 		{
@@ -541,7 +596,7 @@ namespace ParasiticNanites.NPCs
 		}
 		public override void OnHitByProjectile(Projectile projectile, int damage, float knockback, bool crit)
 		{
-			Projectiles.ParasiticNanitesProj.SummonSomeParasiticNanites(projectile.Center, (int)(damage / 6f), false, npc.whoAmI + 1,action:(i)=> { Main.projectile[i].velocity -= projectile.velocity * 0.5f; });
+			Projectiles.ParasiticNanitesProj.SummonSomeParasiticNanites(projectile.Center, (int)(damage / 6f), false, npc.whoAmI + 1, action: (i) => { Main.projectile[i].velocity -= projectile.velocity * 0.5f; });
 		}
 		public override void OnHitByItem(Player player, Item item, int damage, float knockback, bool crit)
 		{
@@ -554,7 +609,7 @@ namespace ParasiticNanites.NPCs
 		//}
 		public override void NPCLoot()
 		{
-			Item.NewItem(npc.Hitbox,ModContent.ItemType<Items.ParasiticNanitesSignalTransmitter>(),5);
+			Item.NewItem(npc.Hitbox, ModContent.ItemType<Items.ParasiticNanitesSignalTransmitter>(), 5);
 			Item.NewItem(npc.Hitbox, ModContent.ItemType<Items.ParasiticNanitesItem>(), 50);
 			if (!ParasiticNanitesWorld.downedPNKingSlime)
 			{
@@ -578,5 +633,6 @@ namespace ParasiticNanites.NPCs
 			XxDefinitions.Utils.SpriteBatchEndUsingEffect(spriteBatch);
 		}
 		public Point PNDXY;
+
 	}
 }

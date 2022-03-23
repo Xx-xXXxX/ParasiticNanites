@@ -109,7 +109,7 @@ namespace ParasiticNanites.NPCs
 		{
 			if (ParasiticNanites.ProjBoom)
 			{
-				XxDefinitions.Utils.SummonUtils.SummonProjExplosionTrap(npc.Center, 196, 300,150, Microsoft.Xna.Framework.Color.Red);
+				XxDefinitions.Utils.SummonUtils.SummonProjExplosionTrap(npc.Center, 196, 300,50, Microsoft.Xna.Framework.Color.Red);
 			}
 			XxDefinitions.Utils.SummonUtils.SummonDustExplosion(npc.Center, 16, 0, 0, ModContent.DustType<Dusts.ParasiticNanitesDust>(), 8, 8, 3);
 

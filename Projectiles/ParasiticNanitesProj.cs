@@ -154,7 +154,7 @@ namespace ParasiticNanites.Projectiles
 			ParasiticNanites.ParasiticNanitesProjNum -= 1;
 			if (projectile.localAI[0] != SpecialDeath) {
 				if (ParasiticNanites.ProjBoom) {
-					XxDefinitions.Utils.SummonUtils.SummonProjExplosionTrap(projectile.Center, (float)Math.Sqrt(Num * 4) * 4 + 4, Num*4 ,Num/4, Color.Red);
+					XxDefinitions.Utils.SummonUtils.SummonProjExplosionTrap(projectile.Center, (float)Math.Sqrt(Num * 4) * 4 + 4, Num*4 ,Num/8, Color.Red);
 				}
 			}
 		}
@@ -293,7 +293,7 @@ namespace ParasiticNanites.Projectiles
 			if (projectile.velocity.Length() > 1)
 			{
 				Collision.HitTiles(projectile.position + projectile.velocity, projectile.velocity, (int)R * 2, (int)R * 2);
-				Main.PlaySound(Terraria.ID.SoundID.Item10, projectile.position);
+				//Main.PlaySound(Terraria.ID.SoundID.Item10, projectile.position);
 			}
 			if (projectile.velocity.X != oldVelocity.X)
 			{
@@ -326,22 +326,13 @@ namespace ParasiticNanites.Projectiles
 			if (ParasiticNanites.ProjSpike)
 			{
 				if (target.friendly)
-					projectile.damage *= 2;
+					damage *= 2;
 				else
-					projectile.damage *= 3;
+					damage *= 3;
 			}
 		}
 		public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
 		{
-
-			//XxDefinitions.XDebugger.Utils.AddDraw.AddDrawString($"Hit {CanHitNPC(target)}", projectile.Center, 15);
-			if (ParasiticNanites.ProjSpike)
-			{
-				if (target.friendly)
-					projectile.damage /= 2;
-				else
-					projectile.damage /= 3;
-			}
 			if (target.buffImmune[ModContent.BuffType<ParasiticNanitesBuff>()]) {
 				//target.immune[projectile.owner] = 0;
 				//Projectile.perIDStaticNPCImmunity[ModContent.ProjectileType<ParasiticNanitesProj>()][target.whoAmI] = (uint)((int)Main.GameUpdateCount + 10);
@@ -361,13 +352,11 @@ namespace ParasiticNanites.Projectiles
 		public override void ModifyHitPlayer(Player target, ref int damage, ref bool crit)
 		{
 			if (ParasiticNanites.ProjSpike)
-				projectile.damage *= 2;
+				damage *= 2;
 			
 		}
 		public override void OnHitPlayer(Player target, int damage, bool crit)
 		{
-			if (ParasiticNanites.ProjSpike)
-				projectile.damage /= 2;
 			if (target.buffImmune[ModContent.BuffType<ParasiticNanitesBuff>()])
 			{
 				
