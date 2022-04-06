@@ -44,7 +44,7 @@ namespace ParasiticNanites.Buffs
                     if (npc.buffTime[ParasiticNanitesIndex] < 0) npc.buffTime[ParasiticNanitesIndex] = 0;
                     ParasiticNanitesNum = npc.buffTime[ParasiticNanitesIndex];
                 }
-                npc.buffTime[buffIndex] -= (int)(Math.Floor(XxDefinitions.Utils.CalculateUtils.SlowlyIncreaseRaw(npc.buffTime[buffIndex], 2f)) / 1.5f *XxDefinitions.Utils.CalculateUtils.SlowlyDecreaseLim1To0(ParasiticNanitesNum, 1.5f));
+                npc.buffTime[buffIndex] -= (int)(Math.Floor(XxDefinitions.Utils.CalculateUtils.SlowlyIncreaseRaw(npc.buffTime[buffIndex], 2f)) / 1.5f *XxDefinitions.Utils.CalculateUtils.SlowlyDecreaseLim1To0(ParasiticNanitesNum, 2f));
                 if (npc.buffTime[buffIndex] < 0) npc.buffTime[buffIndex] = 0;
             }
             XxDefinitions.XDebugger.Utils.AddDraw.AddDrawString($"{npc.buffTime[buffIndex]}", npc.Center + new Vector2(0, +48 + 16));

@@ -85,6 +85,7 @@ namespace ParasiticNanites.Buffs
 		public override bool ReApply(NPC npc, int time, int buffIndex)
 		{
             npc.buffTime[buffIndex] += time;
+            if(time>0) npc.AddBuff(ModContent.BuffType<ParasiticNanitesReduceBuff>(), (int)Math.Ceiling(Math.Log(time + 1)));
             return true;
 		}
 
@@ -112,6 +113,7 @@ namespace ParasiticNanites.Buffs
         {
             //Main.NewText($"Add:{time}");
             player.buffTime[buffIndex] += time;
+            if (time > 0) player.AddBuff(ModContent.BuffType<ParasiticNanitesReduceBuff>(), (int)Math.Ceiling(Math.Log(time + 1)));
             return true;
         }
 		public override void ModifyBuffTip(ref string tip, ref int rare)

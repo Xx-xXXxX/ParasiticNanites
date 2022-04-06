@@ -56,7 +56,7 @@ namespace ParasiticNanites.Projectiles
 		public override bool PreDraw(SpriteBatch spriteBatch, Color lightColor)
 		{
 			if (projectile.ai[0] == 1)
-				return true;
+				Terraria.Utils.DrawLine(spriteBatch, projectile.oldPosition + projectile.Size / 2 + 3*(projectile.oldPosition + projectile.Size / 2 - projectile.Center), projectile.Center, Color.Transparent, Color.Red, 6);
 			else
 				Terraria.Utils.DrawLine(spriteBatch, projectile.oldPosition + projectile.Size / 2 + (projectile.oldPosition + projectile.Size / 2 - projectile.Center), projectile.Center, Color.Transparent, Color.Red, 3);
 			return false;

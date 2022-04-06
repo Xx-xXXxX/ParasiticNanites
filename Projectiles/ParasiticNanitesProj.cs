@@ -29,7 +29,8 @@ namespace ParasiticNanites.Projectiles
 		public static int RandF() {
 			Rand1 = Terraria.Utils.RandomNextSeed(Rand1 ^ Rand2);
 			Rand2 = Terraria.Utils.RandomNextSeed(Rand1 - Rand2);
-			return (int)(Rand1 ^ Rand2);
+			int V = (int)(Rand1 ^ Rand2);
+			return V.ToNonnegative();
 		}
 		public static XxDefinitions.IRandomByDelegate rand = new XxDefinitions.IRandomByDelegate(RandF);
 		public static XxDefinitions.NetPacketTreeLeaf<int> GetRandNet;
@@ -58,7 +59,7 @@ namespace ParasiticNanites.Projectiles
 		{
 			int ai1 = 0;
 			ai1 = XxDefinitions.BitOperate.SetBits(ai1, Flying ? 1 : 0, 0, 1);
-			int i= Projectile.NewProjectile(Pos, vel, ModContent.ProjectileType<ParasiticNanitesProj>(), Num, 0, Main.myPlayer, ai1: XxDefinitions.BitOperate.IToFBit(ai1), ai0: Ignore);
+			int i= Projectile.NewProjectile(Pos, vel, ModContent.ProjectileType<ParasiticNanitesProj>(), Num, 0, Main.myPlayer, ai1: XxDefinitions.BitOperate.ToFloat(ai1), ai0: Ignore);
 			Main.projectile[i].scale= (float)Math.Sqrt(Num) * 4/9;
 			Main.projectile[i].localAI[1] = Main.projectile[i].timeLeft;
 			Main.projectile[i].tileCollide = !Flying;
@@ -159,24 +160,24 @@ namespace ParasiticNanites.Projectiles
 			}
 		}
 		public int Num {
-			get => projectile.damage;
+			get => (int)(projectile.damage*((ParasiticNanites.ProjChasing) ?(0.5f):(1f)));
 			set => projectile.damage = value;
 		}
 		public int IntAI0
 		{
-			get => XxDefinitions.BitOperate.FToIBit(projectile.ai[0]);
-			set => projectile.ai[0] = XxDefinitions.BitOperate.IToFBit(value);
+			get => XxDefinitions.BitOperate.ToInt(projectile.ai[0]);
+			set => projectile.ai[0] = XxDefinitions.BitOperate.ToFloat(value);
 		}
 		public int IntAI1 {
-			get => XxDefinitions.BitOperate.FToIBit(projectile.ai[1]);
-			set => projectile.ai[1]=XxDefinitions.BitOperate.IToFBit(value);
+			get => XxDefinitions.BitOperate.ToInt(projectile.ai[1]);
+			set => projectile.ai[1]=XxDefinitions.BitOperate.ToFloat(value);
 		}
 		public bool Flying {
 			get => XxDefinitions.BitOperate.GetBits(IntAI1,0,1)==1;
 			set => IntAI1=XxDefinitions.BitOperate.SetBits(IntAI1,value?1:0,0,1);
 		}
 		public static bool ParasiticNanitesProjFlying(Projectile projectile) { 
-			return XxDefinitions.BitOperate.GetBits(XxDefinitions.BitOperate.FToIBit(projectile.ai[1]), 0, 1) == 1;
+			return XxDefinitions.BitOperate.GetBits(XxDefinitions.BitOperate.ToInt(projectile.ai[1]), 0, 1) == 1;
 		}
 		public bool AbleToChasing(NPC i) {
 			return i.active && i.CanBeChasedBy() && CanHitNPC(i).Value&&!i.buffImmune[ModContent.BuffType<Buffs.ParasiticNanitesBuff>()];

@@ -80,7 +80,7 @@ namespace ParasiticNanites.NPCs
 					npc.ai[0] += 1;
 				}
 			}
-			if (Main.time % 15 == npc.whoAmI % 15) {
+			if ((int)(Main.time) % 15 == npc.whoAmI % 15) {
 				Dust.NewDust(npc.position,npc.width,npc.height,ModContent.DustType< Dusts.ParasiticNanitesDust>());
 				//npc.StrikeNPC((int)Math.Floor(-0.02f*npc.lifeMax),0,0);
 				//npc.StrikeNPC(25+npc.defense, 0, 0);
@@ -124,6 +124,18 @@ namespace ParasiticNanites.NPCs
 		public override void PostDraw(SpriteBatch spriteBatch, Color drawColor)
 		{
 			XxDefinitions.Utils.SpriteBatchEndUsingEffect(spriteBatch);
+		}
+		public override bool CheckActive()
+		{
+			if (ParasiticNanitesWorld.KingSlimeCount > 0) {
+				if (npc.HasPlayerTarget) {
+					return (Main.player[npc.target].Center - npc.Center).Length() > 6400;
+				}
+				else
+					return base.CheckActive();
+			}
+			else
+			return base.CheckActive();
 		}
 	}
 }

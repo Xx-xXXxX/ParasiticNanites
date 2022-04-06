@@ -23,6 +23,7 @@ namespace ParasiticNanites.Tiles
 			Main.tileMergeDirt[Type] = true;
 			Main.tileBlockLight[Type] = true;
 			Main.tileStone[Type] = true;
+			Main.tileLighted[Type] = true;
 			TileID.Sets.Stone[Type] =true;
 			TileID.Sets.Conversion.Stone[Type] = true; // Allows Clentaminator solutions to convert this tile to their respective Sand tiles.
 			//TileID.Sets.ForAdvancedCollision.ForSandshark[Type] = true; // Allows Sandshark enemies to "swim" in this sand.

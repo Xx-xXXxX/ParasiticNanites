@@ -19,8 +19,8 @@ namespace ParasiticNanites.Items.Accessories
 		{
 			DisplayName.SetDefault("Parasitic Nanites Move Extension");
 			DisplayName.AddTranslation(Terraria.Localization.GameCulture.Chinese, "寄生机器人机动扩展");
-			Tooltip.SetDefault("Parasitic Nanites can trace the target what can be infected");
-			Tooltip.AddTranslation(Terraria.Localization.GameCulture.Chinese, "寄生机器人会追踪可以被感染的生物");
+			Tooltip.SetDefault("Parasitic Nanites can trace the target what can be infected，但效果减半");
+			Tooltip.AddTranslation(Terraria.Localization.GameCulture.Chinese, "寄生机器人会追踪可以被感染的生物，但效果减半");
 		}
 		public override void SetDefaults()
 		{

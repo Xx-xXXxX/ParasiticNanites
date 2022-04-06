@@ -80,7 +80,8 @@ namespace ParasiticNanites.Effects
 			//Color[] Cols=new Color[TWidth*THeight];
 			//textureNow.GetData(Cols);
 			//textureNow = new Texture2D(Main.graphics.GraphicsDevice, TWidth, THeight, false, SurfaceFormat.Color);
-			if (Main.time % 60 == 0)
+			//Main.NewText($"{(int)(Main.time)} {(int)(Main.time)%60}");
+			if ((int)(Main.time) % 60 == 0)
 			{
 				//textureNow.SetData(Colo);
 				texture = new Texture2D(Main.graphics.GraphicsDevice, TWidth, THeight, false, SurfaceFormat.Color);

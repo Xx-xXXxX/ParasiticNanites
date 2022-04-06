@@ -27,8 +27,6 @@ namespace ParasiticNanites.Tiles
 			dustType = ModContent.DustType<ParasiticNanitesDust>();
 			//Drop the ExampleSandBlock
 			drop = Terraria.ID.ItemID.SandBlock;
-			
-			//Make ExampleCactus able to grow on this tile
 		}
 
 		public override bool TileFrame(int i, int j, ref bool resetFrame, ref bool noBreak) {
@@ -114,7 +112,6 @@ namespace ParasiticNanites.Tiles
 				return;
 			}
 		}
-
 		public override void NearbyEffects(int i, int j, bool closer)
 		{
 			if (Main.rand.Next(0, 90) == 10)

@@ -17,6 +17,7 @@ using Mono.Cecil;
 using System.Diagnostics;
 using Microsoft.Xna.Framework.Graphics;
 using XxDefinitions;
+using System.IO;
 
 namespace ParasiticNanites.NPCs
 {
@@ -25,23 +26,23 @@ namespace ParasiticNanites.NPCs
 	{
 		public int IntAI0
 		{
-			get => XxDefinitions.BitOperate.FToIBit(npc.ai[0]);
-			set => npc.ai[0] = XxDefinitions.BitOperate.IToFBit(value);
+			get => XxDefinitions.BitOperate.ToInt(npc.ai[0]);
+			set => npc.ai[0] = XxDefinitions.BitOperate.ToFloat(value);
 		}
 		public int IntAI1
 		{
-			get => XxDefinitions.BitOperate.FToIBit(npc.ai[1]);
-			set => npc.ai[1] = XxDefinitions.BitOperate.IToFBit(value);
+			get => XxDefinitions.BitOperate.ToInt(npc.ai[1]);
+			set => npc.ai[1] = XxDefinitions.BitOperate.ToFloat(value);
 		}
 		public int IntAI2
 		{
-			get => XxDefinitions.BitOperate.FToIBit(npc.ai[2]);
-			set => npc.ai[2] = XxDefinitions.BitOperate.IToFBit(value);
+			get => XxDefinitions.BitOperate.ToInt(npc.ai[2]);
+			set => npc.ai[2] = XxDefinitions.BitOperate.ToFloat(value);
 		}
 		public int IntAI3
 		{
-			get => XxDefinitions.BitOperate.FToIBit(npc.ai[3]);
-			set => npc.ai[3] = XxDefinitions.BitOperate.IToFBit(value);
+			get => XxDefinitions.BitOperate.ToInt(npc.ai[3]);
+			set => npc.ai[3] = XxDefinitions.BitOperate.ToFloat(value);
 		}
 		public uint MoveTimeDelay
 		{//0~2^11 2048 0 10
@@ -72,11 +73,15 @@ namespace ParasiticNanites.NPCs
 			get => XxDefinitions.BitOperate.GetBits(IntAI0, 11, 3);
 			set => IntAI0 = XxDefinitions.BitOperate.SetBits(IntAI0, value, 11, 3);
 		}
-		public ulong RandS;
-		public int RandNextInt() => Terraria.Utils.RandomNext(ref RandS, 32);
-		public float RandNextFloat() => Terraria.Utils.RandomFloat(ref RandS);
-		public float RandNextFloatDirection() => (RandNextFloat() - 0.5f) * 2;
-		public bool RandNextBool() => Terraria.Utils.RandomNext(ref RandS, 1) % 2 == 0;
+		public ulong RandS {
+			get=>BitOperate.ToULong(npc.ai[2],npc.ai[3]);
+			set => (npc.ai[2], npc.ai[3]) = BitOperate.ToFloat2(value);
+		}
+		public XxDefinitions.RandomULong1 random;
+		public int RandNextInt() => random.Next();
+		public float RandNextFloat() => random.NextFloat();
+		public float RandNextFloatDirection() => random.NextFloatDirection();
+		public bool RandNextBool() => random.NextBool();
 		public int LifeLevelLife() => (int)((float)LifeLevel / 100 * npc.lifeMax);
 		public Vector2 TeleportPos
 		{
@@ -173,9 +178,9 @@ namespace ParasiticNanites.NPCs
 			//animationType = 15;
 			//CheckTarget();
 			MoveMode = EMoveMode.Teleport;
-			RandS = Terraria.Utils.RandomNextSeed((ulong)(ParasiticNanitesWorld.NewRSF() + (ulong)npc.type + (ulong)Main.projectile[1].type));
 			PNDXY = Effects.ParasiticNanitesDraw.GetRandPNDPoint();
 			ParasiticNanitesWorld.KingSlimeCount += 1;
+			random = new RandomULong1(new RefByDelegate<ulong>(() => RandS, (v) => RandS = v)); ;
 		}
 		public Point TXY = new Point(174, 720);
 		public override void ScaleExpertStats(int numPlayers, float bossLifeScale)
@@ -217,8 +222,13 @@ namespace ParasiticNanites.NPCs
 			else return true;
 		}
 		public static int MaxFallSpeed => 16;
+		public bool firstFrame = true;
 		public void MoveAI()
 		{
+			if (firstFrame) {
+				RandS = Terraria.Utils.RandomNextSeed((ulong)(ParasiticNanitesWorld.NewRSF() + (ulong)npc.type + (ulong)Main.projectile[1].type));
+				firstFrame = false;
+			}
 			Dust.NewDust(npc.position, npc.width, npc.height, PNDustType);
 			//XxDefinitions.XDebugger.Utils.AddDraw.AddDrawString($"{MoveMode}\nTimeDelay:{MoveTimeDelay}\nVY:{npc.velocity.Y}\nJumpTime:{JumpTime}", npc.Center);
 			//XxDefinitions.XDebugger.Utils.AddDraw.AddDrawString($"{Target.Distance(npc.Center)}", Target.Center);
@@ -269,7 +279,9 @@ namespace ParasiticNanites.NPCs
 										//I.velocity += JunpVel / 2;
 										//if (I.Center.X < Target.Center.X - 64) I.velocity += HorizonalMoveA * 10;
 										//if (I.Center.X > Target.Center.X + 64) I.velocity -= HorizonalMoveA * 10;
-										I.velocity += Vector2.Normalize(Target.Center - I.Center) * JunpVel.Length();
+										float L1 = (float)Math.Sqrt((Target.Center - I.Center).Length());
+										float L2 = JunpVel.Length();
+										I.velocity += Vector2.Normalize(Target.Center - I.Center) * Math.Min(L1,L2);
 									}
 								}
 							}
@@ -422,11 +434,11 @@ namespace ParasiticNanites.NPCs
 						{
 							//float R1 = (RandNextFloat() * 2 - 1);
 							//float R2= (RandNextFloat() * 2 - 1);
-							float speed = 12;
+							float speed = 8;
 							Vector2 Pos = npc.position + new Vector2(npc.width * RandNextFloat(), npc.height * RandNextFloat());
 							Vector2 Vel = Vector2.Zero;
 							float? D = (Target.Center - Pos).ToRotation();
-							if (RandNextBool() && (D = XxDefinitions.Utils.CalculateUtils.PredictWithVel(Target.Center - Pos, Target.velocity, speed)).HasValue)
+							if (RandNextBool() && (D = XxDefinitions.Utils.CalculateUtils.PredictWithVel(Target.Center - Pos, Target.velocity, speed*2)).HasValue)
 							{
 
 							}
@@ -633,6 +645,5 @@ namespace ParasiticNanites.NPCs
 			XxDefinitions.Utils.SpriteBatchEndUsingEffect(spriteBatch);
 		}
 		public Point PNDXY;
-
 	}
 }
